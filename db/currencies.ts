@@ -1,6 +1,6 @@
-const currencies = require('./mongodb').db('rates').collection('usd');
-
+const currencies = require('./mongodb')//.db('rates').collection('usd');
 const ObjectId = require('mongodb').ObjectId;
+import {collections} from "./mongodb"
 
 interface curr {
     currency: string,
@@ -14,9 +14,11 @@ const save = async ({currency, rate}: curr) => {
 }
 
 // getAll ...
-const getAll = async () => {
-    const cursor = await currencies.find();
-    return cursor.toArray();
+export async function getAll(): Promise<any> {
+    const cursor = collections.usd?.find({});
+    // console.log(cursor)
+    // return "getAlllllll"
+    return cursor?.toArray();
 }
 
 // getById ...
@@ -35,4 +37,4 @@ const removeById = async (id: string) => {
     await currencies.deleteOne({_id:ObjectId(id)});
 }
 
-module.exports = {getAll, getById, removeById, save, update}
+// export default {getAll, getById, removeById, save, update}
