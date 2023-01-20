@@ -7,34 +7,32 @@ interface curr {
     rate: number
 }
 
-// save ... Create new record.
-const save = async ({currency, rate}: curr) => {
-    const result = await currencies.insertOne({currency, rate});
-    return result.ops[0]
-}
-
-// getAll ...
+// getAll ... Get all currency rates.
 export async function getAll(): Promise<any> {
     const cursor = collections.usd?.find({});
-    // console.log(cursor)
-    // return "getAlllllll"
     return cursor?.toArray();
 }
 
-// getById ...
-const getById = async (id: string) => {
-    return await currencies.findOne({_id:ObjectId(id)})
+// getByName ... Get currency according to provided name.
+export async function getByName (name: string): Promise<any> {
+    return await collections.usd?.findOne({currency: name})
 }
 
-// update ...
-const update = async (id: string, {currency, rate}: curr) => {
-    const result = await currencies.replaceOne({_id:ObjectId(id)}, {currency, rate});
-    return result.ops[0]    
+// insertNew ... Create new record.
+export async function insertNew ({currency, rate}: curr) {
+    const result = await collections.usd?.insertOne({currency, rate});
+    console.log(result)
+    // return result.ops[0]
 }
 
-// remove ...
-const removeById = async (id: string) => {
-    await currencies.deleteOne({_id:ObjectId(id)});
+// updateCurrency ... Update existing currency.
+export async function updateCurrency (name: string, rate: number) {
+    const result = await collections.usd?.updateOne({currency: name}, {$set: {currency: name, rate: rate}});
+    console.log(result)
+    // return result.ops[0]    
 }
 
-// export default {getAll, getById, removeById, save, update}
+// removeByName ... Remove currency by name.
+export async function removeByName (name: string) {
+    await collections.usd?.deleteOne({currency: name});
+}
