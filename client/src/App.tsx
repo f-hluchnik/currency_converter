@@ -5,7 +5,7 @@ import './App.css';
 
 function App() {
   const fromCurrency = "usd";
-  const toCurrency = "eur";
+  const toCurrency = "czk";
   const amount = 5;
   const convertedAmount = useConvert(fromCurrency, toCurrency, amount)
 
