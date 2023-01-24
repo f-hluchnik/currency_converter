@@ -1,7 +1,7 @@
 import useForm from "./useForm";
 
 const Form = () => {
-    var {
+    const {
         amountInput,
         setAmountInput,
         sourceInput,
@@ -16,8 +16,8 @@ const Form = () => {
     return (
         <div>
             <div className="result">
-                <div>{!converted ? "" : parseInt(converted) < 0 ? "Sorry, can't do that." : amountInput + " " + sourceInput.toUpperCase() + " = " + converted + " " + targetInput.toUpperCase()}</div>
-                <div className="rate">{!converted || parseInt(converted) < 0 ? "" : "conversion rate: " + rate}</div>
+                <div>{!converted ? "" : parseInt(converted) < 0 ? "Sorry, can't do that." : `${amountInput} ${sourceInput.toUpperCase()} = ${converted} ${targetInput.toUpperCase()}`}</div>
+                <div className="rate">{!converted || parseInt(converted) < 0 ? "" : `conversion rate: ${rate}`}</div>
             </div>
             <form onSubmit={handleSubmit}>
                 <div className="formInput">
@@ -50,8 +50,8 @@ const Form = () => {
                     </div>
                 </div>
                 <button type="submit">convert</button>
-                <button onClick={resetForm}>reset</button>
             </form>
+            <button onClick={resetForm}>reset</button>
         </div>
     );
 };
