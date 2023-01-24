@@ -19,7 +19,7 @@ currenciesRouter.get(`/exchange/:source([A-z]{3})-:target([A-z]{3})`, async (ctx
         ctx.body = await getExchangeRate(ctx.params.source.toUpperCase(), ctx.params.target.toUpperCase());
         if (ctx.body == null) {
             console.log("Download exchange rates from external API.")
-            const d = await getRates()
+            const d = await getRates(ctx.params.source)
             const da = await reorganizeData(d)
             await saveRates(da)
             console.log("Converting " + ctx.params.source.toUpperCase() + " to " + ctx.params.target.toUpperCase() + ".")
@@ -75,7 +75,7 @@ currenciesRouter.delete(`/`, async (ctx) => {
 })
 
 // getRates ... Fetch exchange rates from an external API.
-async function getRates(base = "USD") {
+async function getRates(base: string) {
     // const mockRates = {
     //     success: true,
     //     timestamp: 1674320643,
