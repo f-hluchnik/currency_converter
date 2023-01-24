@@ -57,8 +57,8 @@ const useForm = () => {
 async function convert(fromCurrency: string, toCurrency: string, amount: number): Promise<{convertedAmount: number, conversionRate: number}> {
     var data: any
     try {
-      const response = await fetch('http://localhost:7654/exchange/' + fromCurrency + "-" + toCurrency)
-      if (response.status == 204) {
+      const response = await fetch('http://currencyapp:7654/exchange/' + fromCurrency + "-" + toCurrency)
+      if (response.status === 204) {
         return {convertedAmount: -1, conversionRate: -1};
       }
       data = await response.json()

@@ -1,12 +1,35 @@
 version: '3.7'
 services:
   mongodb:
-    container_name: currency_db
+    container_name: currency_dbs
     image: mongo:latest
+    restart: always
     ports:
       - 27017:27017
     volumes:
       - mongodb_data_container:/data/db
-
+  currencyapp:
+    container_name: currency_app
+    restart: always
+    build: .
+    env_file: .env
+    environment:
+      - APIKEY=${APIKEY}
+    ports:
+      - 7654:7654
+    external_links:
+      - mongodb
+    depends_on:
+      - mongodb
+  client:
+    container_name: currency_client
+    restart: always
+    build: ./client/
+    ports:
+      - 3000:3000
+    external_links:
+      - currencyapp
+    depends_on:
+      - currencyapp
 volumes:
   mongodb_data_container:

@@ -9,9 +9,7 @@ const Form = () => {
         targetInput,
         setTargetInput,
         converted,
-        setConvertedInput,
         rate,
-        setExchangeRateInput,
         handleSubmit,
         resetForm } = useForm();
 

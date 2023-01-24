@@ -88,51 +88,52 @@ async function fetchNewExchangeRates(base: string): Promise<rawExchangeRates> {
         rates: {}
     }
 
-    rawData = {
-        success: true,
-        timestamp: 1674320643,
-        base: 'USD',
-        date: '2023-01-21',
-        rates: {
-          AUD: 1.436404,
-          BTC: 0.000043072831,
-          CHF: 0.92001,
-          CZK: 21.98605,
-          DKK: 6.853304,
-          EUR: 0.91935,
-          GBP: 0.807168,
-          JPY: 129.55504,
-          PLN: 4.13765,
-          USD: 1
-        }
-      }
-    return rawData;
-
-    // const apiKey = process.env.APIKEY || ""
-    // console.log(apiKey)
-    // var apiURL = "https://api.apilayer.com/fixer/latest?base=" + base;
-    // try {
-    //     const response = await fetch(apiURL, {
-    //         method: 'GET',
-    //         headers: {
-    //           Accept: 'application/json',
-    //           'apikey': apiKey
-    //         },
-    //       });
-      
-    //       if (!response.ok) {
-    //         throw new Error(`Error! status: ${response.status}`);
-    //       }
-    //       return await response.json();
-    // } catch (error) {
-    //     if (error instanceof Error) {
-    //         console.log('error message: ', error.message);
-    //         return rawData;
-    //     } else {
-    //         console.log('unexpected error: ', error);
-    //         return rawData;
+    // MOCK DATA
+    // rawData = {
+    //     success: true,
+    //     timestamp: 1674320643,
+    //     base: 'USD',
+    //     date: '2023-01-21',
+    //     rates: {
+    //       AUD: 1.436404,
+    //       BTC: 0.000043072831,
+    //       CHF: 0.92001,
+    //       CZK: 21.98605,
+    //       DKK: 6.853304,
+    //       EUR: 0.91935,
+    //       GBP: 0.807168,
+    //       JPY: 129.55504,
+    //       PLN: 4.13765,
+    //       USD: 1
     //     }
-    // }
+    //   }
+    // return rawData;
+
+    const apiKey = process.env.APIKEY || ""
+    console.log(apiKey)
+    var apiURL = "https://api.apilayer.com/fixer/latest?base=" + base;
+    try {
+        const response = await fetch(apiURL, {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              'apikey': apiKey
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error(`Error! status: ${response.status}`);
+          }
+          return await response.json();
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('error message: ', error.message);
+            return rawData;
+        } else {
+            console.log('unexpected error: ', error);
+            return rawData;
+        }
+    }
 }
 
 // saveRates ... Saves multiple exchange rates to database.

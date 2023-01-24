@@ -1,5 +1,5 @@
 import * as mongoDB from "mongodb";
-import { config } from "../config";
+import { config } from "../src/config";
 
 const MONGODB_URL = config.mongodb_url;
 
