@@ -2,7 +2,7 @@ import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import cors from "koa2-cors";
 import logger from "koa-logger";
-import { config } from "./config";
+import { config } from "../config";
 import { connectToDatabase } from "../db/mongodb";
 import healthcheckRoutes from "./routes/healthcheck";
 import currencyRoutes from "./routes/currency.router";

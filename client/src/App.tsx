@@ -1,16 +1,9 @@
 import React from 'react';
-// import logo from './logo.svg';
 import logo from './coin.svg';
-import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import './App.css';
 
 function App() {
-  // const fromCurrency = "usd";
-  // const toCurrency = "czk";
-  // const amount = 5;
-  // const convertedAmount = useConvert(fromCurrency, toCurrency, amount)
-
   const [amountInput, setAmount] = useState("")
   const [sourceInput, setSource] = useState("")
   const [targetInput, setTarget] = useState("")
@@ -26,9 +19,7 @@ function App() {
     toCurrency = targetInput
     amount = parseInt(amountInput)
     convertedAmount = await convert(fromCurrency, toCurrency, amount)
-    // console.log(inputs)
     setConverted(convertedAmount.toString())
-    // alert(convertedAmount);
   }
 
   const resetForm = () => {
@@ -78,8 +69,6 @@ function App() {
 
 // convert ... Function converts between currencies.
 async function convert(fromCurrency: string, toCurrency: string, amount: number): Promise<number> {
-  // const [myData, setData] = React.useState<any>([]);
-
   var data: any
   try {
     const response = await fetch('http://localhost:7654/exchange/' + fromCurrency + "-" + toCurrency)
@@ -89,10 +78,6 @@ async function convert(fromCurrency: string, toCurrency: string, amount: number)
   } catch (err) {
     console.log(err)
   }
-
-  // React.useEffect(() => {
-    // getMyData();
-  // }, []);
   return amount*data.exchangeRate
 }
 

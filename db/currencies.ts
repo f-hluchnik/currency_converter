@@ -1,11 +1,13 @@
-const currencies = require('./mongodb')//.db('rates').collection('usd');
-const ObjectId = require('mongodb').ObjectId;
 import {collections} from "./mongodb"
 
-interface curr {
-    currency: string,
-    rate: number
+type exchangeRate = {
+    sourceCurrency: string,
+    targetCurrency: string,
+    exchangeRate: number,
+    timestamp: number
 }
+
+type multipleExchangeRates = Array<exchangeRate>
 
 // getAll ... Get all currency rates.
 export async function getAll(): Promise<any> {
@@ -19,30 +21,14 @@ export async function getExchangeRate (source: string, target: string): Promise<
 }
 
 // insertNew ... Create new record.
-export async function insertNew (obj: myObject) {
-    const result = await collections.currencies?.insertOne(obj);
-    console.log(result)
-    // return result.ops[0]
-}
-
-type myArray = [
-    obj: myObject
-]
-
-type myObject = {
-    sourceCurrency: string,
-    targetCurrency: string,
-    exchangeRate: number,
-    timestamp: number
-}
-
-// insertManyNew ... Create new record.
-export async function insertManyNew (arr: any) {
-    const result = await collections.currencies?.insertMany(arr);
+export async function insertNew (newRecord: exchangeRate) {
+    const result = await collections.currencies?.insertOne(newRecord);
     // console.log(result)
-    //@ts-ignore
-    return result
-    // return result.ops[0]
+}
+
+// insertNewExchangeRates ... Insert multiple new exchange rates.
+export async function insertNewExchangeRates (newRecords: any) {
+    return await collections.currencies?.insertMany(newRecords);
 }
 
 // updateCurrency ... Update existing currency.
