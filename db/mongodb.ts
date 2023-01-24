@@ -1,9 +1,12 @@
 import * as mongoDB from "mongodb";
+import { config } from "../config";
+
+const MONGODB_URL = config.mongodb_url;
 
 export const collections: { currencies?: mongoDB.Collection } = {}
 
 export async function connectToDatabase () {
-    const client: mongoDB.MongoClient = new mongoDB.MongoClient('mongodb://172.18.0.2:27017/');        
+    const client: mongoDB.MongoClient = new mongoDB.MongoClient(MONGODB_URL);        
     await client.connect();    
     const db: mongoDB.Db = client.db('currencyRates');
     const currencyCollection: mongoDB.Collection = db.collection('currencies');
