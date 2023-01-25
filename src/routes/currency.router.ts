@@ -1,5 +1,6 @@
 import Router from "koa-router";
 import {getExchangeRate, insertNewExchangeRates} from "../../db/currencies";
+import fetch from 'cross-fetch';
 import dotenv from 'dotenv';
 dotenv.config()
 
