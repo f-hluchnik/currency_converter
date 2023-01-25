@@ -3,11 +3,11 @@ FROM node:16.10.0-alpine
 WORKDIR /app
 
 COPY package.json ./
-COPY tsconfig.json ./
+RUN npm install
 
+COPY tsconfig.json ./
 COPY src ./src
 COPY public ./public
-RUN npm install
 RUN npm run build
 
 FROM node:16.10.0-alpine

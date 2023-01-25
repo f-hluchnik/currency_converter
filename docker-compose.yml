@@ -8,6 +8,8 @@ services:
       - 27017:27017
     volumes:
       - mongodb_data_container:/data/db
+    networks:
+      - currency_network
   currencyapp:
     container_name: currency_app
     restart: always
@@ -17,19 +19,27 @@ services:
       - APIKEY=${APIKEY}
     ports:
       - 7654:7654
-    external_links:
-      - mongodb
+    links:
+      - mongodb:mongodb
     depends_on:
       - mongodb
+    networks:
+      - currency_network
   client:
     container_name: currency_client
     restart: always
     build: ./client/
     ports:
       - 3000:3000
-    external_links:
-      - currencyapp
+    links:
+      - currencyapp:currencyapp
     depends_on:
       - currencyapp
+    networks:
+      - currency_network
+networks:
+  currency_network:
+    external: false
+    name: currency_network
 volumes:
   mongodb_data_container:

@@ -12,11 +12,7 @@ const app = new Koa();
 const PORT = config.port;
 
 app.use(bodyParser());
-app.use(
-  cors({
-    origin: "*"
-  })
-);
+app.use(cors());
 app.use(logger());
 connectToDatabase().then(() => {
     // use routes

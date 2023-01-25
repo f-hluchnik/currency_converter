@@ -33,14 +33,12 @@ const currenciesRouter = new Router();
 // Returns exchange rate between provided currencies.
 currenciesRouter.get(`/exchange/:source([A-z]{3})-:target([A-z]{3})`, async (ctx) => {
     try {
-        ctx.body = await getExchangeRate(ctx.params.source.toUpperCase(), ctx.params.target.toUpperCase());
-        if (ctx.body == null) {
-            console.log("Download exchange rates from external API.")
-            const newExchangeRates = await fetchNewExchangeRates(ctx.params.source)
-            const preparedExchangeRates = await prepareData(newExchangeRates)
-            await saveExchangeRates(preparedExchangeRates)
-            ctx.body = await getExchangeRate(ctx.params.source.toUpperCase(), ctx.params.target.toUpperCase());
+        var result = await getExchangeRate(ctx.params.source.toUpperCase(), ctx.params.target.toUpperCase())
+        if (result == null || bigTimeDifference(result.timestamp)) {
+            await downloadAndSaveNewRates(ctx.params.source)
+            result = await getExchangeRate(ctx.params.source.toUpperCase(), ctx.params.target.toUpperCase());
         }
+        ctx.body = result
     } catch (err) {
         console.error(err);
     }
@@ -78,8 +76,27 @@ currenciesRouter.post(`/insertnewrates/`, async (ctx) => {
 //     }
 // })
 
+// downloadAndSaveNewRates ... Downloads and saves new exchange rats to DB.
+async function downloadAndSaveNewRates(sourceCurrency: string) {
+    console.log("Download exchange rates from external API.")
+    const newExchangeRates = await fetchNewExchangeRates(sourceCurrency)
+    const preparedExchangeRates = await prepareData(newExchangeRates)
+    await saveExchangeRates(preparedExchangeRates)
+}
+
+// bigTimeDifference ... Determines if time difference between exchange rate timestamp and now is greater than 1 day.
+function bigTimeDifference(timestamp: number): boolean {
+    const nowSeconds = Math.floor(Date.now() / 1000)
+    const timeDifference = nowSeconds - timestamp
+    const oneDaySeconds = 86400
+    if (timeDifference > oneDaySeconds) {
+        return true;
+    }
+    return false;
+}
+
 // getRates ... Fetch exchange rates from an external API.
-async function fetchNewExchangeRates(base: string): Promise<rawExchangeRates> {
+async function fetchNewExchangeRates(base: string): Promise<rawExchangeRates|any> {
     var rawData: rawExchangeRates = {
         success: false,
         timestamp: 0,
@@ -110,7 +127,6 @@ async function fetchNewExchangeRates(base: string): Promise<rawExchangeRates> {
     // return rawData;
 
     const apiKey = process.env.APIKEY || ""
-    console.log(apiKey)
     var apiURL = "https://api.apilayer.com/fixer/latest?base=" + base;
     try {
         const response = await fetch(apiURL, {
@@ -121,9 +137,9 @@ async function fetchNewExchangeRates(base: string): Promise<rawExchangeRates> {
             },
           });
       
-          if (!response.ok) {
-            throw new Error(`Error! status: ${response.status}`);
-          }
+        //   if (!response.ok) {
+        //     throw new Error(`Error! status: ${response.status}`);
+        //   }
           return await response.json();
     } catch (error) {
         if (error instanceof Error) {
@@ -148,16 +164,16 @@ async function saveExchangeRates(newRates: multipleExchangeRates) {
             });
         
             console.log("status: " + response.statusText)
-            if (response.status != 200) {
-                throw new Error(`Error! status: ${response.status}`);
-            }
+            // if (response.status != 200) {
+            //     throw new Error(`Error! status: ${response.status}`);
+            // }
     } catch (error) {
         if (error instanceof Error) {
             console.log('error message: ', error.message);
-            return error.message;
+            // return error.message;
         } else {
             console.log('unexpected error: ', error);
-            return 'An unexpected error occurred';
+            // return 'An unexpected error occurred';
         }
     }
 

@@ -23,7 +23,6 @@ export async function getExchangeRate (source: string, target: string): Promise<
 // insertNew ... Create new record.
 export async function insertNew (newRecord: exchangeRate) {
     const result = await collections.currencies?.insertOne(newRecord);
-    // console.log(result)
 }
 
 // insertNewExchangeRates ... Insert multiple new exchange rates.
@@ -34,8 +33,7 @@ export async function insertNewExchangeRates (newRecords: any) {
 // updateCurrency ... Update existing currency.
 export async function updateCurrency (name: string, rate: number) {
     const result = await collections.currencies?.updateOne({currency: name}, {$set: {currency: name, rate: rate}});
-    console.log(result)
-    // return result.ops[0]    
+    console.log(result)  
 }
 
 // removeByName ... Remove currency by name.
